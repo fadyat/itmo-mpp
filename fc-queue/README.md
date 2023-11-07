@@ -1,4 +1,4 @@
-# FAA-based queue
+# FC-based queue
 
 In [`src/FlatCombiningQueue.kt`](src/FlatCombiningQueue.kt), implement a concurrent queue via the
 _flat-combining_ technique,
