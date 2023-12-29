@@ -88,15 +88,15 @@ class DynamicArrayImpl<E> : DynamicArray<E> {
             newCore.array[idx].value = x
 
             if (!activeCore.nextCore.compareAndSet(null, newCore)) {
-                move(activeCore, activeCore.nextCore.value!!) // helping
+                copy(activeCore, activeCore.nextCore.value!!) // helping
             } else {
-                move(activeCore, newCore)
+                copy(activeCore, newCore)
                 return
             }
         }
     }
 
-    private fun move(activeCore: Core<E>, newCore: Core<E>) {
+    private fun copy(activeCore: Core<E>, newCore: Core<E>) {
         for (idx in 0 until activeCore.capacity) {
             while (true) {
                 when (val have = activeCore.get(idx)) {
