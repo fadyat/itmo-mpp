@@ -20,9 +20,8 @@ fun shortestPathParallel(start: Node) {
     val onFinish = Phaser(workers + 1)
     repeat(workers) {
         thread {
-            while (true) {
-                val c = q.poll()
-                    ?: if (q.isEmpty()) break else continue
+            while (!q.isEmpty()) {
+                val c = q.poll() ?: continue
 
                 for (e in c.outgoingEdges) {
                     while (true) {
