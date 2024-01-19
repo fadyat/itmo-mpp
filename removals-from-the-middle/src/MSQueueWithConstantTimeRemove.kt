@@ -38,8 +38,6 @@ class MSQueueWithConstantTimeRemove<E> : QueueWithRemove<E> {
                 if (nhead.markExtractedOrRemoved()) {
                     return nhead.element
                 }
-
-                nhead.next.get() ?: return null
             }
         }
     }
