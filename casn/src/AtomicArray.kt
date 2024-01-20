@@ -7,11 +7,8 @@ class AtomicArray<E>(size: Int, initialValue: E) {
 
     fun get(index: Int) = a[index]!!.value
 
-    fun set(
-        index: Int,
-        value: E,
-    ) {
-        a[index]!!.value = value
+    fun set(index: Int, v: E) {
+        a[index]!!.value = v
     }
 
     fun cas(
@@ -34,11 +31,10 @@ class AtomicArray<E>(size: Int, initialValue: E) {
 
         val (index, expected, descriptor) = order(index1, expected1, update1, index2, expected2, update2)
 
-        if (a[index]!!.compareAndSet(expected, descriptor)) {
+        return if (a[index]!!.compareAndSet(expected, descriptor)) {
             descriptor.complete()
-            return descriptor.isSuccess
         } else {
-            return false
+            false
         }
     }
 

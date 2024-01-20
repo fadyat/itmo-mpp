@@ -9,22 +9,22 @@ class CAS2Descriptor<T>(
     private fun rdcss(): Boolean {
         val descriptor = RDCSSDescriptor(b, expectedB, this, this)
         if (b.v.value == this || b.compareAndSet(expectedB, descriptor)) {
-            descriptor.complete()
-            return descriptor.isSuccess
+            return descriptor.complete()
         }
 
         return false
     }
 
-    override fun complete() {
+    override fun complete(): Boolean {
         outcomeCompareAndSet(if (rdcss()) Outcome.SUCCESS else Outcome.FAILURE)
 
-        if (isSuccess) {
-            a.v.compareAndSet(this, updateA)
-            b.v.compareAndSet(this, updateB)
-        } else {
-            a.v.compareAndSet(this, expectedA)
-            b.v.compareAndSet(this, expectedB)
+        val (updA, updB) = when (isSuccess) {
+            true -> updateA to updateB
+            else -> expectedA to expectedB
         }
+
+        a.v.compareAndSet(this, updA)
+        b.v.compareAndSet(this, updB)
+        return isSuccess
     }
 }

@@ -18,7 +18,7 @@ abstract class Descriptor {
 
     protected fun outcomeCompareAndSet(update: Outcome) = state.compareAndSet(Outcome.UNDECIDED, update)
 
-    abstract fun complete()
+    abstract fun complete(): Boolean
 }
 
 class Ref<T>(initial: T) {
@@ -63,10 +63,11 @@ class RDCSSDescriptor<T>(
     private val updateA: Any?,
     private val descriptor: Descriptor,
 ) : Descriptor() {
-    override fun complete() {
+    override fun complete(): Boolean {
         outcomeCompareAndSet(if (descriptor.isUndecided) Outcome.SUCCESS else Outcome.FAILURE)
 
         val update = if (isSuccess) updateA else expectedA
         a.v.compareAndSet(this, update)
+        return isSuccess
     }
 }
