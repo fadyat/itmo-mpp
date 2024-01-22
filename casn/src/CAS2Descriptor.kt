@@ -16,7 +16,7 @@ class CAS2Descriptor<T>(
     }
 
     override fun complete(): Boolean {
-        outcomeCompareAndSet(if (rdcss()) Outcome.SUCCESS else Outcome.FAILURE)
+        if (rdcss()) outcomeCompareAndSet(Outcome.SUCCESS)
 
         val (updA, updB) = when (isSuccess) {
             true -> updateA to updateB

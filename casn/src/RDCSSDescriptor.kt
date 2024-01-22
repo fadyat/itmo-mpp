@@ -4,7 +4,6 @@ import kotlinx.atomicfu.loop
 enum class Outcome {
     UNDECIDED,
     SUCCESS,
-    FAILURE,
 }
 
 abstract class Descriptor {
@@ -64,7 +63,7 @@ class RDCSSDescriptor<T>(
     private val descriptor: Descriptor,
 ) : Descriptor() {
     override fun complete(): Boolean {
-        outcomeCompareAndSet(if (descriptor.isUndecided) Outcome.SUCCESS else Outcome.FAILURE)
+        if (descriptor.isUndecided) outcomeCompareAndSet(Outcome.SUCCESS)
 
         val update = if (isSuccess) updateA else expectedA
         a.v.compareAndSet(this, update)
